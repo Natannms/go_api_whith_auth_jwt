@@ -1,0 +1,107 @@
+swagger: "2.0"
+info:
+  description: "Descrição da API"
+  version: "1.0"
+  title: "Título da API"
+host: "localhost:8080"
+basePath: "/"
+schemes:
+- "http"
+paths:
+  /signup:
+    post:
+      summary: Register a new user
+      tags:
+        - users
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: user
+          description: User object
+          required: true
+          schema:
+            $ref: "#/definitions/User"
+      responses:
+        '201':
+          description: User created successfully
+          schema:
+            $ref: "#/definitions/User"
+        '400':
+          description: Invalid request
+  /login:
+    post:
+      summary: Authenticate a user and get JWT token
+      tags:
+        - auth
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: credentials
+          description: User credentials (email and password)
+          required: true
+          schema:
+            $ref: "#/definitions/Credentials"
+      responses:
+        '200':
+          description: JWT token generated successfully
+          schema:
+            $ref: "#/definitions/Token"
+        '401':
+          description: Unauthorized
+  /users/{id}:
+    get:
+      summary: Get a user by ID
+      tags:
+        - users
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          description: User ID
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: User found successfully
+          schema:
+            $ref: "#/definitions/User"
+        '404':
+          description: User not found
+          definitions:
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      created_at:
+        type: string
+        format: date-time
+      updated_at:
+        type: string
+        format: date-time
+  Credentials:
+    type: object
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+  Token:
+    type: object
+    properties:
+      token:
+        type: string
